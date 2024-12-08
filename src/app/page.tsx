@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import SignInButton from '@/components/SignInButton';
 import { supabase } from '@/utils/supabase/server';
 import '../styles/pageStyles.css';
+import Image from 'next/image';
 
 interface TextItem {
   id: string;
@@ -67,7 +68,7 @@ export default function Page() {
             )}
             {item.type === 'image' && (
               <>
-                <img src={item.src} alt={`Image ${item.id}`} width="100%" height="100%" />
+                <Image src={item.src} alt={`Image ${item.id}`} layout="responsive" width={500} height={500} />
                 <p className="item-description">{item.description || 'No description available'}</p>
               </>
             )}

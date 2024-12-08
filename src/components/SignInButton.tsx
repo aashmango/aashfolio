@@ -11,28 +11,26 @@ export default function SignInButton() {
 
   const handleSignUp = async () => {
     try {
-      const { user, session, error } = await signUp(email, password);
+      const { user, error } = await signUp(email, password);
       if (error) {
         setError(error.message);
       } else {
         console.log('User signed up:', user);
         setIsSignedIn(true);
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
     }
   };
 
   const handleSignIn = async () => {
     try {
-      const { user, session, error } = await signIn(email, password);
-      if (error) {
-        setError(error.message);
-      } else {
+      const { user } = await signIn(email, password);
+      if (user) {
         console.log('User signed in:', user);
         setIsSignedIn(true);
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
     }
   };
@@ -45,7 +43,7 @@ export default function SignInButton() {
       } else {
         setIsSignedIn(false);
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
     }
   };
