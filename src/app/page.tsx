@@ -1,42 +1,54 @@
-import SignInButton from '@/components/SignInButton';
-import { supabase } from '@/utils/supabase/server'
-import '../styles/pageStyles.css'; 
+'use client';
 
-export default async function Page() {
-  // Fetch all columns from the three tables
-  const { data: texts } = await supabase.from('text').select();
-  const { data: videos } = await supabase.from('videos').select();
-  const { data: images } = await supabase.from('images').select();
+import { useState, useEffect } from 'react';
+import SignInButton from '@/components/SignInButton';
+import { supabase } from '@/utils/supabase/server';
+import '../styles/pageStyles.css';
+
+export default function Page() {
+  const [allItems, setAllItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: texts } = await supabase.from('text').select();
+      const { data: videos } = await supabase.from('videos').select();
+      const { data: images } = await supabase.from('images').select();
+
+      setAllItems([
+        ...(texts || []).map((text: any) => ({ ...text, type: 'text' })),
+        ...(videos || []).map((video: any) => ({ ...video, type: 'video' })),
+        ...(images || []).map((image: any) => ({ ...image, type: 'image' })),
+      ]);
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <div className="grid-container">
+    <div className="container">
       <SignInButton />
-      <h2>Texts</h2>
-      <div className="grid">
-        {texts?.map((text: any) => (
-          <div key={text.id} className={`card ${text.size}`}>
-            <p>{text.content || 'No content available'}</p>
-          </div>
-        ))}
-      </div>
-
-      <h2>Videos</h2>
-      <div className="grid">
-        {videos?.map((video: any) => (
-          <div key={video.id} className={`card ${video.size}`}>
-            <video controls width="100%">
-              <source src={video.src || ''} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        ))}
-      </div>
-
-      <h2>Images</h2>
-      <div className="grid">
-        {images?.map((image: any) => (
-          <div key={image.id} className={`card ${image.size}`}>
-            <img src={image.src || ''} alt={`Image ${image.id}`} width="100%" />
+      <div className="grid-container">
+        {allItems.map((item: any) => (
+          <div
+            key={item.id}
+            className={`card ${item.size || 'small'}`}
+          >
+            {item.type === 'text' && <p className="item-text">{item.content || 'No content available'}</p>}
+            {item.type === 'video' && (
+              <>
+                <video controls width="100%" height="100%">
+                  <source src={item.src || ''} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <p className="item-description">{item.description || 'No description available'}</p>
+              </>
+            )}
+            {item.type === 'image' && (
+              <>
+                <img src={item.src || ''} alt={`Image ${item.id}`} width="100%" height="100%" />
+                <p className="item-description">{item.description || 'No description available'}</p>
+              </>
+            )}
           </div>
         ))}
       </div>

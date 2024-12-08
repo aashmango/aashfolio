@@ -51,7 +51,7 @@ export default function SignInButton() {
   };
 
   return (
-    <div style={{ position: 'absolute', top: 10, right: 10 }}>
+    <div style={{ position: 'absolute', bottom: 10, right: 10 }}>
       {isSignedIn ? (
         <button onClick={handleSignOut}>Sign Out</button>
       ) : (

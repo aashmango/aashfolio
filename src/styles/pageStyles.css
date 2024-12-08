@@ -1,34 +1,31 @@
 .grid-container {
     display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12-column grid */
     gap: 16px;
-  }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 16px;
-  }
-  
-  .card {
+    padding: 16px;
+}
+
+.card {
     border: 1px solid #ccc;
     padding: 4px;
     box-sizing: border-box;
-  }
-  
-  .card.small {
-    grid-column: span 1;
-  }
-  
-  .card.medium {
-    grid-column: span 2;
-  }
-  
-  .card.large {
-    grid-column: span 3;
-  }
-  
-  @media (min-width: 768px) {
-    .grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
+    width: 100%;
+    height: auto;
+}
+
+.card.small {
+    grid-column: span 4; /* Small items take 4 columns */
+}
+
+.card.medium {
+    grid-column: span 8; /* Medium items take 8 columns */
+}
+
+.card.large {
+    grid-column: span 12; /* Large items take full width */
+}
+
+.item-text,
+.item-description {
+  font-size: 16px;
+}
