@@ -5,8 +5,33 @@ import SignInButton from '@/components/SignInButton';
 import { supabase } from '@/utils/supabase/server';
 import '../styles/pageStyles.css';
 
+interface TextItem {
+  id: string;
+  content: string;
+  size?: string;
+}
+
+interface VideoItem {
+  id: string;
+  src: string;
+  description?: string;
+  size?: string;
+}
+
+interface ImageItem {
+  id: string;
+  src: string;
+  description?: string;
+  size?: string;
+}
+
+type Item = 
+  | (TextItem & { type: 'text' })
+  | (VideoItem & { type: 'video' })
+  | (ImageItem & { type: 'image' });
+
 export default function Page() {
-  const [allItems, setAllItems] = useState<any[]>([]);
+  const [allItems, setAllItems] = useState<Item[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,9 +40,9 @@ export default function Page() {
       const { data: images } = await supabase.from('images').select();
 
       setAllItems([
-        ...(texts || []).map((text: any) => ({ ...text, type: 'text' })),
-        ...(videos || []).map((video: any) => ({ ...video, type: 'video' })),
-        ...(images || []).map((image: any) => ({ ...image, type: 'image' })),
+        ...(texts || []).map((text) => ({ ...text, type: 'text' as const })),
+        ...(videos || []).map((video) => ({ ...video, type: 'video' as const })),
+        ...(images || []).map((image) => ({ ...image, type: 'image' as const })),
       ]);
     };
 
@@ -28,16 +53,13 @@ export default function Page() {
     <div className="container">
       <SignInButton />
       <div className="grid-container">
-        {allItems.map((item: any) => (
-          <div
-            key={item.id}
-            className={`card ${item.size || 'small'}`}
-          >
+        {allItems.map((item) => (
+          <div key={item.id} className={`card ${item.size || 'small'}`}>
             {item.type === 'text' && <p className="item-text">{item.content || 'No content available'}</p>}
             {item.type === 'video' && (
               <>
                 <video controls width="100%" height="100%">
-                  <source src={item.src || ''} type="video/mp4" />
+                  <source src={item.src} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 <p className="item-description">{item.description || 'No description available'}</p>
@@ -45,7 +67,7 @@ export default function Page() {
             )}
             {item.type === 'image' && (
               <>
-                <img src={item.src || ''} alt={`Image ${item.id}`} width="100%" height="100%" />
+                <img src={item.src} alt={`Image ${item.id}`} width="100%" height="100%" />
                 <p className="item-description">{item.description || 'No description available'}</p>
               </>
             )}
