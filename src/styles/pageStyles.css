@@ -1,6 +1,6 @@
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(12, 1fr); /* 12-column grid */
+    grid-template-columns: repeat(16, 1fr);
     gap: 16px;
     padding: 16px;
 }
@@ -28,4 +28,15 @@
 .item-text,
 .item-description {
   font-size: 16px;
+}
+
+@media (max-width: 800px) {
+    .grid-container {
+        grid-template-columns: repeat(8, 1fr); /* Adjust to 8 columns */
+        gap: 8px; /* Adjust gap size if needed */
+    }
+
+    .card {
+        grid-column: span 8 !important; /* All items take 8 columns */
+    }
 }

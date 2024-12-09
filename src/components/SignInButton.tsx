@@ -3,8 +3,12 @@
 import { useState } from 'react';
 import { signUp, signIn, signOut } from '@/utils/supabase/auth';
 
-export default function SignInButton() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+interface SignInButtonProps {
+  isSignedIn: boolean;
+  setIsSignedIn: (isSignedIn: boolean) => void;
+}
+
+export default function SignInButton({ isSignedIn, setIsSignedIn }: SignInButtonProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
